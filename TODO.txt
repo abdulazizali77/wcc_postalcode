@@ -1,9 +1,11 @@
 9:39 AM 7/5/2023
-1. initial
-2. add distance component
-3. add rest controller GET
+1. initial 12:57 PM 7/5/2023 DONE
+2. add distance component 12:57 PM 7/5/2023 DONE
+3. add rest controller GET 12:59 PM 7/5/2023 DOING
+	3a. distance EP 12:59 PM 7/5/2023 DONE
+	3b. postcode EP
 --------------
-4. add unit test
+4. add unit test 12:58 PM 7/5/2023 DOING
 5. add int test
 --------------
 6. add h2
