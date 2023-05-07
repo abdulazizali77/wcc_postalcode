@@ -1,17 +1,17 @@
 9:39 AM 7/5/2023
 1. initial 12:57 PM 7/5/2023 DONE
 2. add distance component 12:57 PM 7/5/2023 DONE
-3. add rest controller GET 12:59 PM 7/5/2023 DOING
+3. add rest controller GET 12:59 PM 7/5/2023 DOING 6:03 PM 7/5/2023 DONE
 	3a. distance EP 12:59 PM 7/5/2023 DONE
-	3b. postcode EP
-10. define postcode service
+	3b. postcode EP 6:03 PM 7/5/2023 DONE
+10. define postcode service 6:03 PM 7/5/2023 DONE
 	10a. setup jpa repo 5:20 PM 7/5/2023 OK
 	
 --------------
 4. add unit test 12:58 PM 7/5/2023 DOING
-5. add int test
+5. add int test 6:04 PM 7/5/2023 DONE
 --------------
-6. add h2
+6. add h2 6:04 PM 7/5/2023 DONE
 7. add PUT POST
 --------------
 8. spring security
