@@ -1,0 +1,13 @@
+9:39 AM 7/5/2023
+1. initial
+2. add distance component
+3. add rest controller GET
+--------------
+4. add unit test
+5. add int test
+--------------
+6. add h2
+7. add PUT POST
+--------------
+8. spring security
+9. request logging
