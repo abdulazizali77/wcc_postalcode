@@ -5,7 +5,7 @@
 	3a. distance EP 12:59 PM 7/5/2023 DONE
 	3b. postcode EP
 10. define postcode service
-	10a. setup jpa repo
+	10a. setup jpa repo 5:20 PM 7/5/2023 OK
 	
 --------------
 4. add unit test 12:58 PM 7/5/2023 DOING
