@@ -6,6 +6,8 @@
 	3b. postcode EP 6:03 PM 7/5/2023 DONE
 	3c. fix response return JSON 9:45 AM 9/5/2023 DONE
 	3d. fix response return JSON - postcode doesnt exist what should be returned 9:45 AM 9/5/2023 DONE
+	3e. fix int tests
+
 10. define postcode service 6:03 PM 7/5/2023 DONE
 	10a. setup jpa repo 5:20 PM 7/5/2023 OK
 	
@@ -15,6 +17,9 @@
 --------------
 6. add h2 6:04 PM 7/5/2023 DONE
 7. add PUT POST
+12. add GET findAll
 --------------
 8. spring security
+	basic authc
 9. request logging
+11. load testing
