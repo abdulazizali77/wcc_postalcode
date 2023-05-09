@@ -16,7 +16,8 @@
 5. add int test 6:04 PM 7/5/2023 DONE
 --------------
 6. add h2 6:04 PM 7/5/2023 DONE
-7. add PUT POST
+7. add PUT POST 3:48 PM 9/5/2023 DOING
+	7a. add 
 12. add GET findAll
 --------------
 8. spring security
@@ -25,3 +26,4 @@
 11. load testing
 	11a. test apache ab 3:01 PM 9/5/2023 OK
 	11b. load testing - implement async
+13. i18n
