@@ -26,6 +26,7 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}&pc2={pc2}").build(pc1, pc2);
 
+        //FIXME: will fail
         Double d = restTemplate.getForObject(uri, Double.class);
         assert (d == 11.62191361776278);
     }
@@ -38,6 +39,7 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}").build(pc1);
 
+        //FIXME: will fail
         Double d = restTemplate.getForObject(uri, Double.class);
         //should return a 500 currently, catch the Exception
         assert (d == null);
@@ -52,6 +54,7 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}&pc2={pc2}").build(pc1, pc2);
 
+        //FIXME: will fail
         Double d = restTemplate.getForObject(uri, Double.class);
         //should return a 500 currently
         assert (d == null);
@@ -65,6 +68,7 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}&pc2={pc2}").build(pc1, pc2);
 
+        //FIXME: will fail
         Double d = restTemplate.getForObject(uri, Double.class);
         //should return a 500 currently
         assert (d == null);
