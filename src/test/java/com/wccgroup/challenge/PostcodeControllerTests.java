@@ -1,5 +1,6 @@
 package com.wccgroup.challenge;
 
+import com.wccgroup.challenge.domain.model.DistanceResponse;
 import com.wccgroup.challenge.domain.model.Postcode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,8 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}&pc2={pc2}").build(pc1, pc2);
 
-        //FIXME: will fail
-        Double d = restTemplate.getForObject(uri, Double.class);
-        assert (d == 11.62191361776278);
+        DistanceResponse distanceResponse = restTemplate.getForObject(uri, DistanceResponse.class);
+        assert (distanceResponse.getDistance() == 11.62191361776278);
     }
 
     @Test
@@ -39,10 +39,10 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}").build(pc1);
 
-        //FIXME: will fail
-        Double d = restTemplate.getForObject(uri, Double.class);
-        //should return a 500 currently, catch the Exception
-        assert (d == null);
+        //FIXME: need to get result code
+        DistanceResponse distanceResponse = restTemplate.getForObject(uri, DistanceResponse.class);
+        assert (distanceResponse.getDistance() == null);
+        assert (distanceResponse.getVerbose() == null);
     }
 
     @Test
@@ -54,10 +54,9 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}&pc2={pc2}").build(pc1, pc2);
 
-        //FIXME: will fail
-        Double d = restTemplate.getForObject(uri, Double.class);
-        //should return a 500 currently
-        assert (d == null);
+        DistanceResponse distanceResponse = restTemplate.getForObject(uri, DistanceResponse.class);
+        assert (distanceResponse.getDistance() == null);
+        assert ("Postcode doesnt exist".equals(distanceResponse.getVerbose()));
     }
 
     @Test
@@ -68,10 +67,9 @@ public class PostcodeControllerTests {
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
         URI uri = factory.uriString("http://localhost:" + port + "/postcodedistance?pc1={pc1}&pc2={pc2}").build(pc1, pc2);
 
-        //FIXME: will fail
-        Double d = restTemplate.getForObject(uri, Double.class);
-        //should return a 500 currently
-        assert (d == null);
+        DistanceResponse distanceResponse = restTemplate.getForObject(uri, DistanceResponse.class);
+        assert (distanceResponse.getDistance() == null);
+        assert ("Postcode doesnt exist".equals(distanceResponse.getVerbose()));
     }
 
     @Test
