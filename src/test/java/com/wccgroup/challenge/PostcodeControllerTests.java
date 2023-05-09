@@ -1,7 +1,9 @@
 package com.wccgroup.challenge;
 
+import com.wccgroup.challenge.domain.model.Coordinate;
 import com.wccgroup.challenge.domain.model.DistanceResponse;
 import com.wccgroup.challenge.domain.model.Postcode;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,4 +78,24 @@ public class PostcodeControllerTests {
     void testFailureAntipode() {
     }
 
+    //FIXME: kind of wonky
+    @Disabled
+    @Test
+    void testAddSuccess(){
+        DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
+        factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+        URI uri = factory.uriString("http://localhost:" + port + "/addpostcode").build();
+        Postcode postcode = restTemplate.postForObject(uri, new Postcode("X", new Coordinate(1.0d, 2.0d)), Postcode.class);
+        assert (postcode.postcode.equals("X"));
+        assert (postcode.coordinate.getLatitude().equals(1.0d));
+        assert (postcode.coordinate.getLongitude().equals(1.0d));
+    }
+    @Test
+    void testAddFailDuplicate(){
+
+    }
+    @Test
+    void testAddFailEmptyCoordinates(){
+
+    }
 }

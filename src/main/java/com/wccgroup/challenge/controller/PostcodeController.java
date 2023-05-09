@@ -1,28 +1,33 @@
 package com.wccgroup.challenge.controller;
 
+import com.wccgroup.challenge.domain.dao.PostcodeRepository;
 import com.wccgroup.challenge.domain.model.DistanceRequest;
 import com.wccgroup.challenge.domain.model.DistanceResponse;
 import com.wccgroup.challenge.domain.model.Postcode;
 import com.wccgroup.challenge.service.IDistanceService;
 import com.wccgroup.challenge.service.IPostcodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 
 @RestController
 public class PostcodeController {
-
+    @Autowired
+    MessageSource messageSource;
 
     @Autowired
     IPostcodeService postcodeService;
@@ -30,28 +35,61 @@ public class PostcodeController {
     @Autowired
     IDistanceService distanceService;
 
+    @Autowired
+    PostcodeRepository postcodeRepository;
 
     @GetMapping("/postcodedistance")
     @ResponseBody
-    public ResponseEntity<DistanceResponse> getDistanceById(@RequestParam String pc1, @RequestParam String pc2) {
+    public ResponseEntity<DistanceResponse> getDistanceById(final HttpServletRequest request, @RequestParam String pc1, @RequestParam String pc2) {
 
         Postcode postcode1 = postcodeService.getPostcode(pc1);
         Postcode postcode2 = postcodeService.getPostcode(pc2);
         if (postcode1 == null || postcode2 == null) {
-            //TODO: i8n
-            return ResponseEntity.badRequest().body(new DistanceResponse("Postcode doesnt exist"));
+            //TODO: templatize messages
+            return ResponseEntity.badRequest().body(new DistanceResponse(messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale())));
         } else {
             return ResponseEntity.ok().body(new DistanceResponse(
-                    distanceService.calculateDistance(postcode1.coordinate.latitude, postcode1.coordinate.longitude,
-                            postcode2.coordinate.latitude, postcode2.coordinate.longitude)
+                    distanceService.calculateDistance(postcode1.coordinate.getLatitude(), postcode1.coordinate.getLongitude(),
+                            postcode2.coordinate.getLatitude(), postcode2.coordinate.getLongitude())
             ));
         }
     }
 
-    //FIXME: still only getting same values as sync version
+    @PostMapping("/addpostcode")
+    public ResponseEntity addPostcode(final HttpServletRequest request, @RequestBody Postcode postcode) {
+        //FIXME: duplicates
+        //FIXME: empty coordinates
+        //FIXME: flushing perf hit
+
+        Postcode pc = postcodeRepository.getReferenceByPostcode(postcode.postcode);
+        //TODO: templatize messages
+        if (pc != null) {
+            return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.postcode.exists", null, request.getLocale()));
+        } else if (postcode.coordinate == null) {
+            return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.coordinates.null", null, request.getLocale()));
+        } else {
+            return ResponseEntity.ok().body(postcodeRepository.saveAndFlush(postcode));
+        }
+    }
+
+    @PutMapping("/updatepostcode")
+    public ResponseEntity updatePostcode(final HttpServletRequest request, @RequestBody Postcode postcode) {
+        Postcode pc = postcodeRepository.getReferenceByPostcode(postcode.postcode);
+        if (pc != null) {
+            //FIXME: BAD
+            pc.coordinate = postcode.coordinate;
+            postcodeRepository.saveAndFlush(pc);
+            return ResponseEntity.ok().body(pc);
+        } else {
+            //TODO: templatize messages
+            return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale()));
+        }
+    }
+
+    //FIXME: still only getting same values as sync version!
     @GetMapping("/postcodedistanceasync")
     @ResponseBody
-    public Mono<ResponseEntity<DistanceResponse>> getDistanceByIdAsync(@RequestParam String pc1, @RequestParam String pc2) {
+    public Mono<ResponseEntity<DistanceResponse>> getDistanceByIdAsync(final HttpServletRequest request, @RequestParam String pc1, @RequestParam String pc2) {
         CompletableFuture<Postcode> postcode1Async = postcodeService.getPostcodeAsync(pc1);
         CompletableFuture<Postcode> postcode2Async = postcodeService.getPostcodeAsync(pc2);
 
@@ -79,8 +117,8 @@ public class PostcodeController {
                         //TODO: i8n
                         return CompletableFuture.completedFuture(null);
                     } else {
-                        return CompletableFuture.completedFuture(distanceService.calculateDistance(postcode1.coordinate.latitude, postcode1.coordinate.longitude,
-                                postcode2.coordinate.latitude, postcode2.coordinate.longitude));
+                        return CompletableFuture.completedFuture(distanceService.calculateDistance(postcode1.coordinate.getLatitude(), postcode1.coordinate.getLongitude(),
+                                postcode2.coordinate.getLatitude(), postcode2.coordinate.getLongitude()));
 
                     }
                 };
@@ -89,7 +127,8 @@ public class PostcodeController {
                 .map(result -> {
                     String verbose = null;
                     if (result == null) {
-                        verbose = "Postcode doesnt exist";
+                        //TODO: templatize messages
+                        verbose = messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale());
                     }
                     return ResponseEntity.ok(new DistanceResponse(verbose, result));
                 });
@@ -100,8 +139,8 @@ public class PostcodeController {
     @PostMapping(path = "/calculateDistance", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Double getRawDistance(@RequestBody DistanceRequest distanceRequest) {
-        return distanceService.calculateDistance(distanceRequest.coord1.latitude, distanceRequest.coord1.longitude,
-                distanceRequest.coord2.latitude, distanceRequest.coord2.longitude);
+        return distanceService.calculateDistance(distanceRequest.coord1.getLatitude(), distanceRequest.coord1.getLongitude(),
+                distanceRequest.coord2.getLatitude(), distanceRequest.coord2.getLongitude());
     }
 
 }

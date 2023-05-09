@@ -14,7 +14,7 @@ public class Postcode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public String Id;
+    public Long Id;
     @Column(unique = true)
     public String postcode;
     @Embedded
@@ -22,6 +22,12 @@ public class Postcode {
 
 
     public Postcode() {
-
     }
+
+    public Postcode(String postcode, Coordinate coordinate) {
+    }
+
+    public Postcode(String postcode, Double longitude, Double latitude) {
+    }
+
 }
