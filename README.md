@@ -10,7 +10,7 @@ requires JDK 11
 
 `curl -v -X GET "http://localhost:8080/list"`
 
-## distance calc `/distance` is open to any auth user
+## distance calc `/postcodedistance` is open to any auth user
 
 `curl -v -u user1:user1Pass -X GET "http://localhost:8080/postcodedistance?pc1=AB16%206SZ&pc2=AB21%200AL"`
 
