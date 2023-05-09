@@ -19,7 +19,7 @@
 7. add PUT POST 3:48 PM 9/5/2023 DOING 7:31 PM 9/5/2023 DONE
 	7a. add 7:31 PM 9/5/2023 DONE
 	7b. update 7:32 PM 9/5/2023 DONE
-12. add GET findAll
+12. add GET findAll 8:21 PM 9/5/2023 DONE
 --------------
 8. spring security - basic authc 8:17 PM 9/5/2023 DONE
 	
