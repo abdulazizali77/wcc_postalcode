@@ -21,7 +21,11 @@ public class BasicConfiguration {
                 .inMemoryAuthentication()
                 .withUser("user1")
                 .password(passwordEncoder().encode("user1Pass"))
-                .authorities("ROLE_USER");
+                .authorities("ROLE_USER")
+                .and()
+                .withUser("admin1")
+                .password(passwordEncoder().encode("admin1Pass"))
+                .authorities("ROLE_ADMIN");
     }
 
     @Bean
@@ -31,9 +35,12 @@ public class BasicConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/securityNone")
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/list")
                 .permitAll()
+                .antMatchers("/update*", "/add*")
+                .hasAuthority("ROLE_ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
