@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
@@ -37,6 +39,8 @@ public class PostcodeController {
 
     @Autowired
     PostcodeRepository postcodeRepository;
+
+    //TODO: should cache/memoize requests
 
     @GetMapping("/postcodedistance")
     @ResponseBody
@@ -84,6 +88,12 @@ public class PostcodeController {
             //TODO: templatize messages
             return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale()));
         }
+    }
+
+    @GetMapping("/list")
+    @ResponseBody
+    public ResponseEntity<List<Postcode>> getAllPostcodes() {
+        return ResponseEntity.ok().body(postcodeRepository.findAll());
     }
 
     //FIXME: still only getting same values as sync version!
