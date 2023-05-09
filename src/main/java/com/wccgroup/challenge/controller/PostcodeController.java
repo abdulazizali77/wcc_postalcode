@@ -4,6 +4,7 @@ import com.wccgroup.challenge.domain.dao.PostcodeRepository;
 import com.wccgroup.challenge.domain.model.DistanceRequest;
 import com.wccgroup.challenge.domain.model.DistanceResponse;
 import com.wccgroup.challenge.domain.model.Postcode;
+import com.wccgroup.challenge.domain.model.Units;
 import com.wccgroup.challenge.service.IDistanceService;
 import com.wccgroup.challenge.service.IPostcodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,18 +45,20 @@ public class PostcodeController {
 
     @GetMapping("/postcodedistance")
     @ResponseBody
-    public ResponseEntity<DistanceResponse> getDistanceById(final HttpServletRequest request, @RequestParam String pc1, @RequestParam String pc2) {
+    public ResponseEntity<DistanceResponse> getDistanceById(final HttpServletRequest request,
+                                                            @RequestParam String pc1, @RequestParam String pc2,
+                                                            @RequestParam(required = false) String unit) {
 
         Postcode postcode1 = postcodeService.getPostcode(pc1);
         Postcode postcode2 = postcodeService.getPostcode(pc2);
+        Units convertedUnit = Units.getUnit(unit);
         if (postcode1 == null || postcode2 == null) {
             //TODO: templatize messages
             return ResponseEntity.badRequest().body(new DistanceResponse(messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale())));
         } else {
-            return ResponseEntity.ok().body(new DistanceResponse(
-                    distanceService.calculateDistance(postcode1.coordinate.getLatitude(), postcode1.coordinate.getLongitude(),
-                            postcode2.coordinate.getLatitude(), postcode2.coordinate.getLongitude())
-            ));
+            Double v = distanceService.calculateDistance(postcode1.coordinate.getLatitude(), postcode1.coordinate.getLongitude(),
+                    postcode2.coordinate.getLatitude(), postcode2.coordinate.getLongitude()) * convertedUnit.multiplier;
+            return ResponseEntity.ok().body(new DistanceResponse(null, postcode1, postcode2, v, convertedUnit.label));
         }
     }
 
@@ -142,7 +145,29 @@ public class PostcodeController {
                         //TODO: templatize messages
                         verbose = messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale());
                     }
-                    return ResponseEntity.ok(new DistanceResponse(verbose, result));
+                    //FIXME: OMG bad
+                    Postcode postcode1 = null;
+                    Postcode postcode2 = null;
+                    //FIXME: BAD
+                    try {
+                        postcode1 = postcode1Async.get();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        postcode2 = postcode2Async.get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    //FIXME: add units param
+                    return ResponseEntity.ok(new DistanceResponse(verbose,
+                            postcode1, postcode2,
+                            result, Units.KM.label));
                 });
 
     }
