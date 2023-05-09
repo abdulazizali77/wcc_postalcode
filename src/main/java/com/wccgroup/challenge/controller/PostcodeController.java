@@ -35,8 +35,7 @@ public class PostcodeController {
 
     @PostMapping(path = "/calculateDistance", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Double getRawDistance(@RequestBody DistanceRequest distanceRequest
-    ) {
+    public Double getRawDistance(@RequestBody DistanceRequest distanceRequest) {
         return distanceService.calculateDistance(distanceRequest.coord1.latitude, distanceRequest.coord1.longitude,
                 distanceRequest.coord2.latitude, distanceRequest.coord2.longitude);
     }
