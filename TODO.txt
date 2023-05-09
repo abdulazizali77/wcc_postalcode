@@ -23,3 +23,5 @@
 	basic authc
 9. request logging
 11. load testing
+	11a. test apache ab 3:01 PM 9/5/2023 OK
+	11b. load testing - implement async
