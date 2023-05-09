@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
-public class PostcodeService implements IPostcodeService{
+public class PostcodeService implements IPostcodeService {
     @Autowired
     PostcodeRepository postcodeRepository;
 
@@ -16,6 +18,11 @@ public class PostcodeService implements IPostcodeService{
     public Postcode getPostcode(String pcStr) {
         Postcode postcode = postcodeRepository.getReferenceByPostcode(pcStr);
         return postcode;
+    }
+
+    @Override
+    public CompletableFuture<Postcode> getPostcodeAsync(String pcStr) {
+        return CompletableFuture.completedFuture(postcodeRepository.getReferenceByPostcode(pcStr));
     }
 
     @Override

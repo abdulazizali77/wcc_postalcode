@@ -2,6 +2,8 @@ package com.wccgroup.challenge.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class HaversineDistance implements IDistanceService {
     private final static double EARTH_RADIUS = 6371; // radius in kilometers
