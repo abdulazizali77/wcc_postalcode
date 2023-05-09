@@ -3,8 +3,8 @@ package com.wccgroup.challenge.service;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
+//TODO: implement other algos
 public interface IDistanceService {
     double calculateDistance(double latitude, double longitude, double latitude2, double longitude2);
 

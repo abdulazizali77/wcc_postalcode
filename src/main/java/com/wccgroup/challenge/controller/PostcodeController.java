@@ -79,14 +79,16 @@ public class PostcodeController {
     @PutMapping("/updatepostcode")
     public ResponseEntity updatePostcode(final HttpServletRequest request, @RequestBody Postcode postcode) {
         Postcode pc = postcodeRepository.getReferenceByPostcode(postcode.postcode);
-        if (pc != null) {
+        if (pc == null) {
+            return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale()));
+        } else if (postcode.coordinate == null) {
+            return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.coordinates.null", null, request.getLocale()));
+        } else {
             //FIXME: BAD
+            //TODO: templatize messages
             pc.coordinate = postcode.coordinate;
             postcodeRepository.saveAndFlush(pc);
             return ResponseEntity.ok().body(pc);
-        } else {
-            //TODO: templatize messages
-            return ResponseEntity.badRequest().body(messageSource.getMessage("message.error.postcode.doesnotexist", null, request.getLocale()));
         }
     }
 

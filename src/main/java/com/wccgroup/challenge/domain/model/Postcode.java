@@ -24,10 +24,17 @@ public class Postcode {
     public Postcode() {
     }
 
-    public Postcode(String postcode, Coordinate coordinate) {
+    public Postcode(String postcode) {
+        this(postcode, null);
     }
 
-    public Postcode(String postcode, Double longitude, Double latitude) {
+    public Postcode(String postcode, Coordinate coordinate) {
+        this.postcode = postcode;
+        this.coordinate = coordinate;
+    }
+
+    public Postcode(String postcode, Double latitude, Double longitude) {
+        this(postcode, new Coordinate(latitude, longitude));
     }
 
 }

@@ -21,10 +21,10 @@ public class DistanceServiceTests {
 
     @Test
     void antipodeTest(){
-
+        //TODO:implement
     }
     @Test
     void invalidValues(){
-
+        //TODO:implement
     }
 }
