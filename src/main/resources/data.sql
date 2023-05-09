@@ -18,3 +18,4 @@ INSERT INTO postcodelatlng (id,postcode,latitude,longitude) VALUES (17, 'AB16 6S
 INSERT INTO postcodelatlng (id,postcode,latitude,longitude) VALUES (18, 'AB16 7NX', '57.168438','-2.161636');
 INSERT INTO postcodelatlng (id,postcode,latitude,longitude) VALUES (19, 'AB21 0AL', '57.263206','-2.158990');
 INSERT INTO postcodelatlng (id,postcode,latitude,longitude) VALUES (20, 'AB21 0TF', '57.221877','-2.273372');
+ALTER SEQUENCE HIBERNATE_SEQUENCE RESTART WITH 21
